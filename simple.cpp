@@ -234,7 +234,7 @@ int main(int argc, char **argv) {
 
     std::cout << "\nNew Test\n" << std::endl;
 
-    constexpr const int NUM_GROUPS = 11;
+    constexpr const int NUM_GROUPS = 8;
     RTThread* threads = (RTThread*)std::malloc(3 * NUM_GROUPS * sizeof(RTThread));
 
     for (int i = 0; i < 3 * NUM_GROUPS; i += 3) {
