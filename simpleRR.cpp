@@ -1,17 +1,4 @@
-/*                                                                  
- * POSIX Real Time Example
- * using a single pthread as RT thread
- */
- 
-#include <limits.h>
-#include <pthread.h>
-#include <sched.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/mman.h>
 #include <iostream>
-#include <string>
-#include <chrono>
 #include <new>
 
 #include "rtthread.hpp"
@@ -25,8 +12,8 @@ int main(int argc, char **argv) {
 
     for (int i = 0; i < 3 * NUM_GROUPS; i += 3) {
         new (threads + i) RTThread ("OTHER");
-        new (threads + i + 1) RTThread(1, "FIFO");
-        new (threads + i + 2) RTThread(99, "FIFO");
+        new (threads + i + 1) RTThread("RR", 1);
+        new (threads + i + 2) RTThread("RR", 99);
     }
 
     for (int i = 0; i < 3 * NUM_GROUPS; ++i) {
