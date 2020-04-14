@@ -61,8 +61,13 @@ int sched_setattr(pid_t pid, const struct sched_attr *attr, unsigned int flags) 
    return syscall(__NR_sched_setattr, pid, attr, flags);
 }
 
+int sched_getattr(pid_t pid, const struct sched_attr *attr, unsigned int size, unsigned int flags) {
+   return syscall(__NR_sched_getattr, pid, attr, size, flags);
+}
+
 void * priority_thread_func(void * ptr);
 void * basic_thread_func(void * ptr);
+void * deadline_thread_func(void * ptr);
 
 class RTThread {
     private:
@@ -255,13 +260,6 @@ RTThread::RTThread(std::string sched_policy, int runtime, int deadline, int peri
         printf("pthread setstacksize failed\n");
         exit(ret);
     }
-
-    /* Set scheduler policy and priority of pthread */
-    ret = pthread_attr_setschedpolicy(&attr, this->policy);
-    if (ret) {
-        printf("pthread setschedpolicy failed\n");
-        exit(ret);
-    }
     /* Use scheduling parameters of attr */
     ret = pthread_attr_setinheritsched(&attr, PTHREAD_EXPLICIT_SCHED);
     if (ret) {
@@ -291,9 +289,10 @@ void * deadline_thread_func(void * ptr) {
     int ret;
     int flags = 0;
     struct sched_attr attr;
-
-    memset(&attr, 0, sizeof(attr)); 
-    attr.size = sizeof(attr);
+    
+    ret = sched_getattr(0, &attr, sizeof(attr), 0);
+    if (ret < 0)
+        perror("sched_getattr failed");
 
     /* This creates a 200ms / 1s reservation */
     attr.sched_policy   = SCHED_DEADLINE;
@@ -316,7 +315,7 @@ void * deadline_thread_func(void * ptr) {
     );
 
     for (int i = 0; i < 1000000; i++) {
-        for(int j = 0; j < 1000; j++) {
+        for(int j = 0; j < 100; j++) {
             (*p++)+1.144564542315345;
             (*q++)+1;
         }
