@@ -259,6 +259,8 @@ void * deadline_thread_func(void * ptr) {
         "\tPeriod: " << data.period << \
         "\tDeadline: " << (duration < data.deadline ? GREEN "Made" RESET : RED "Missed" RESET) << std::endl;
 
+    sched_yield();
+
     return NULL;
 }
 
@@ -284,6 +286,8 @@ void * priority_thread_func(void * ptr) {
         "\tSched Policy: " << data.policy_string << \
         "\tPriority: " << data.priority << std::endl;
 
+    sched_yield();
+
     return NULL;
 }
 
@@ -306,6 +310,8 @@ void * basic_thread_func(void * ptr) {
     std::cout << '[' << std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now().time_since_epoch() - start_time).count() << ']' << \
         " Thread: " << data.thread_id << \
         "\tSched Policy: " << data.policy_string << std::endl;
+
+    sched_yield();
 
     return NULL;
 }
