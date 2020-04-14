@@ -1,7 +1,7 @@
 #include <iostream>
 #include <new>
 
-#include "rtthread.hpp"
+#include "RTThread.hpp"
 
 int main(int argc, char **argv) {
 
