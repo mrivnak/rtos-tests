@@ -12,6 +12,7 @@
 #include <unistd.h>
 
 #include "RTThread.hpp"
+#include "termcolors.h"
 
 
 int sched_setattr(pid_t pid, const struct sched_attr *attr, unsigned int flags) {
