@@ -2,6 +2,7 @@
 #define _GNU_SOURCE
 #include <string>
 
+// Struct for passing data to thread functions
 typedef struct {
     int thread_id;
     int priority;
@@ -11,6 +12,7 @@ typedef struct {
     int period;
 } thread_msg;
 
+// Struct for setattr system call
 struct sched_attr {
     uint32_t size;
 

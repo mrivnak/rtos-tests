@@ -240,19 +240,20 @@ void * deadline_thread_func(void * ptr) {
     float * p;
     int * q;
 
-    auto start_time = std::chrono::duration_cast<std::chrono::nanoseconds>(
+    auto start_time = std::chrono::duration_cast<std::chrono::microseconds>(
         std::chrono::system_clock::now().time_since_epoch()
     );
 
+    // Create a heavy load that takes some time to execute
     for (int i = 0; i < 1000000; i++) {
         for(int j = 0; j < 100; j++) {
             (*p++)+1.144564542315345;
             (*q++)+1;
         }
     }
-    int duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now().time_since_epoch() - start_time).count();
-    std::cout << '[' << duration << ']' << \
-        " Thread: " << data.thread_id << \
+    int duration = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now().time_since_epoch() - start_time).count();
+    std::cout << '[' << BLUE << duration << RESET << ']' << \
+        "\tThread: " << data.thread_id << \
         "\tSched Policy: " << data.policy_string << \
         "\tRuntime: " << data.runtime << \
         "\tDeadline: " << data.deadline << \
@@ -270,10 +271,11 @@ void * priority_thread_func(void * ptr) {
     float * p;
     int * q;
 
-    auto start_time = std::chrono::duration_cast<std::chrono::nanoseconds>(
+    auto start_time = std::chrono::duration_cast<std::chrono::microseconds>(
         std::chrono::system_clock::now().time_since_epoch()
     );
 
+    // Create a heavy load that takes some time to execute
     for (int i = 0; i < 1000000; i++) {
         for(int j = 0; j < 1000; j++) {
             (*p++)+1.144564542315345;
@@ -281,10 +283,15 @@ void * priority_thread_func(void * ptr) {
         }
     }
 
-    std::cout << '[' << std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now().time_since_epoch() - start_time).count() << ']' << \
-        " Thread: " << data.thread_id << \
-        "\tSched Policy: " << data.policy_string << \
-        "\tPriority: " << data.priority << std::endl;
+    std::cout << '[' << BLUE << std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now().time_since_epoch() - start_time).count() << RESET << ']' << \
+        "\tThread: " << data.thread_id << \
+        "\tSched Policy: " << GREEN << data.policy_string << RESET << \
+        "\tPriority: " << ((data.priority >= 1 && data.priority <= 20) ? RED : \
+        (data.priority > 20 && data.priority <= 40) ? YELLOW : \
+        (data.priority > 40 && data.priority <= 60) ? GREEN : \
+        (data.priority > 60 && data.priority <= 80) ? BLUE : \
+        (data.priority > 80 && data.priority <= 99) ? CYAN : WHITE) \
+         << data.priority << RESET << std::endl;
 
     sched_yield();
 
@@ -296,10 +303,11 @@ void * basic_thread_func(void * ptr) {
     float * p;
     int * q;
 
-    auto start_time = std::chrono::duration_cast<std::chrono::nanoseconds>(
+    auto start_time = std::chrono::duration_cast<std::chrono::microseconds>(
         std::chrono::system_clock::now().time_since_epoch()
     );
 
+    // Create a heavy load that takes some time to execute
     for (int i = 0; i < 1000000; i++) {
         for(int j = 0; j < 1000; j++) {
             (*p++)+1.144564542315345;
@@ -307,9 +315,9 @@ void * basic_thread_func(void * ptr) {
         }
     }
 
-    std::cout << '[' << std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now().time_since_epoch() - start_time).count() << ']' << \
-        " Thread: " << data.thread_id << \
-        "\tSched Policy: " << data.policy_string << std::endl;
+    std::cout << '[' << BLUE << std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now().time_since_epoch() - start_time).count() << RESET << ']' << \
+        "\tThread: " << data.thread_id << \
+        "\tSched Policy: " << YELLOW << data.policy_string << RESET << std::endl;
 
     sched_yield();
 
